@@ -1,3 +1,6 @@
+'''
+load all json models from folder 
+''' 
 import os
 import json
 

@@ -1,3 +1,8 @@
+'''
+test openGL
+render a triangle
+''' 
+
 import glfw
 import OpenGL.GL as gl
 
