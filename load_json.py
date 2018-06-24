@@ -4,7 +4,7 @@ load all jsonmodels from a folder
 import os
 import json
 
-def load_models(directory):
+def load_folder(directory):
     models = []
     for filename in os.listdir(directory):
         if filename.endswith('.json'):

@@ -9,9 +9,9 @@ def load_directory(directory, res):
     for filename in os.listdir(directory):
         if filename.endswith('.obj'):
             with open(os.path.join(directory, filename)) as f:
-                voxels = [v for v in voxelize("models_unprocessed/{}".format(filename), res)] #60
+                voxels = [v for v in voxelize("models_unprocessed_obj/{}".format(filename), res)] #60
                 print("Processed {}. Total voxels generated: {}".format(filename,len(voxels)))
-                with open('models/{}.json'.format(os.path.splitext(filename)[0]), 'w') as outfile:
+                with open('models/{}_{}.json'.format(res, os.path.splitext(filename)[0]), 'w') as outfile:
                     json.dump(voxels, outfile)
     return models
 

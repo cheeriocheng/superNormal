@@ -1,7 +1,7 @@
 import glfw
 import OpenGL.GL as gl
 import OpenGL.GLU as glu
-import load_models
+import load_json
 
 def Cube():
     vertices= (
@@ -59,7 +59,7 @@ def main():
     glu.gluPerspective(45, (display[0]/display[1]), 0.1, 200.0)
     gl.glTranslatef(0.0,0.0, -120)
 
-    models = load_models.load_models('models')
+    models = load_json.load_folder('models')
 
     # Loop until the user closes the window
     while not glfw.window_should_close(window):
@@ -87,6 +87,7 @@ def main():
         # gl.glRotatef(glfw.get_time() , 0, 1, 1)
         gl.glRotatef(0.5 , 0, 1.5, 0)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT|gl.GL_DEPTH_BUFFER_BIT)
+
 
         for chair in models:
             for c in chair:
