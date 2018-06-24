@@ -3,8 +3,7 @@ import OpenGL.GL as gl
 import OpenGL.GLU as glu
 import load_models
 
-def main():
-
+def Cube():
     vertices= (
         (1, -1, -1),
         (1, 1, -1),
@@ -30,14 +29,14 @@ def main():
         (5,7)
     )
 
-    def Cube():
-        gl.glBegin(gl.GL_LINES)
-        for edge in edges:
-            for vertex in edge:
-                gl.glVertex3fv(vertices[vertex])
-        gl.glEnd()
+    gl.glBegin(gl.GL_LINES)
+    for edge in edges:
+        for vertex in edge:
+            gl.glVertex3fv(vertices[vertex])
+    gl.glEnd()
 
 
+def main():
 
     # Initialize the library
     if not glfw.init():
@@ -60,9 +59,7 @@ def main():
     glu.gluPerspective(45, (display[0]/display[1]), 0.1, 200.0)
     gl.glTranslatef(0.0,0.0, -120)
 
-
     models = load_models.load_models('models')
-    chair = models[0]
 
     # Loop until the user closes the window
     while not glfw.window_should_close(window):
@@ -88,13 +85,14 @@ def main():
         
        
         # gl.glRotatef(glfw.get_time() , 0, 1, 1)
-        gl.glRotatef(0.5 , 1, 1, 0)
+        gl.glRotatef(0.5 , 0, 1.5, 0)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT|gl.GL_DEPTH_BUFFER_BIT)
 
-        for c in chair:
-            gl.glTranslate( cubeSize*c[0] , cubeSize*c[1] , cubeSize*c[2] )
-            Cube()
-            gl.glTranslate( -cubeSize*c[0] , -cubeSize*c[1] , -cubeSize*c[2] )
+        for chair in models:
+            for c in chair:
+                gl.glTranslate( cubeSize*c[0] , cubeSize*c[1] , cubeSize*c[2] )
+                Cube()
+                gl.glTranslate( -cubeSize*c[0] , -cubeSize*c[1] , -cubeSize*c[2] )
 
         # Swap front and back buffers
         glfw.swap_buffers(window)
