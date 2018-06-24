@@ -1,5 +1,5 @@
 '''
-load all jsonmodels from folder 
+load all jsonmodels from a folder 
 ''' 
 import os
 import json
