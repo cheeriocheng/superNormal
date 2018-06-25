@@ -12,18 +12,20 @@ import pprint
 
 RESOLUTION = 60 #only deal with the chairs at the same resolution 
 MATRIX_SIZE = RESOLUTION + 1 
+CUBE_SIZE = 2 
 
 def drawCube():
-    vertices= (
-        (1, -1, -1),
-        (1, 1, -1),
-        (-1, 1, -1),
-        (-1, -1, -1),
-        (1, -1, 1),
-        (1, 1, 1),
-        (-1, -1, 1),
-        (-1, 1, 1)
-        )
+    vertices= np.array([\
+        [1, -1, -1],
+        [1, 1, -1],
+        [-1, 1, -1],
+        [-1, -1, -1],
+        [1, -1, 1],
+        [1, 1, 1],
+        [-1, -1, 1],
+        [-1, 1, 1]
+        ])
+
     edges = (
         (0,1),
         (0,3),
@@ -46,6 +48,30 @@ def drawCube():
     gl.glEnd()
 
 
+def averageChairs():
+    occupiedCubes = []
+     #load all the models with the same grid  
+    models = load_json.load_folder('models',RESOLUTION )
+
+    # an empty list for holding chair models 
+    voxel_matrix = np.zeros((MATRIX_SIZE ,MATRIX_SIZE, MATRIX_SIZE))
+    # adding up chairs 
+    for chair in models:
+        #for each vox written in json file 
+        for c in chair: 
+            voxel_matrix[c[0],c[1],c[2]] += 1 
+    voxel_matrix = np.array(voxel_matrix)/(len(models))
+    # create a list of solid cells          
+    for x in range(MATRIX_SIZE): 
+        for y in range(MATRIX_SIZE): 
+            for z in range(MATRIX_SIZE): 
+                v = voxel_matrix[x,y,z]
+                # print("{},{},{}.{}".format(x,y,z,v))
+                if v > 0.5:
+                    occupiedCubes.append([x,y,z,v])
+
+    return occupiedCubes 
+
 def main():
 
     # Initialize the library
@@ -62,57 +88,14 @@ def main():
     # Make the window's context current
     glfw.make_context_current(window)
 
-    cubeSize = 2 
-
     glu.gluPerspective(45, (display[0]/display[1]), 0.1, 400.0)
-    gl.glTranslatef(- RESOLUTION*cubeSize/2, -RESOLUTION*cubeSize/2, - RESOLUTION*cubeSize*2) #-60-RESOLUTION*4
+    gl.glTranslatef(- RESOLUTION*CUBE_SIZE/2, -RESOLUTION*CUBE_SIZE/2, - RESOLUTION*CUBE_SIZE*2) #-60-RESOLUTION*4
     gl.glColor4f(1,1,1,1)
 
-    #load all the models with the same grid  
-    models = load_json.load_folder('models',RESOLUTION )
-    
-    # an empty list for holding chair models 
-    voxel_matrix = np.zeros((MATRIX_SIZE ,MATRIX_SIZE, MATRIX_SIZE))
-    # adding up chairs 
-    for chair in models:
-        #for each vox written in json file 
-        for c in chair: 
-            voxel_matrix[c[0],c[1],c[2]] += 1 
-    voxel_matrix = np.array(voxel_matrix)/(len(models))
-
-    cubes = []
-    # create a list of solid cells          
-    for x in range(MATRIX_SIZE): 
-        for y in range(MATRIX_SIZE): 
-            for z in range(MATRIX_SIZE): 
-                v = voxel_matrix[x,y,z]
-                # print("{},{},{}.{}".format(x,y,z,v))
-                if v > 0.5:
-                    cubes.append([x,y,z,v])
-
-    offsetX = 0 # RESOLUTION 
+    cubes = averageChairs() 
 
     # Loop until the user closes the window
     while not glfw.window_should_close(window):
-        # Render here, e.g. using pyOpenGL
-        # width, height = glfw.get_framebuffer_size(window)
-        # ratio = width / float(height)
-        # gl.glViewport(0, 0, width, height)
-        # gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-        # gl.glMatrixMode(gl.GL_PROJECTION)
-        # gl.glLoadIdentity()
-        # gl.glOrtho(-ratio, ratio, -1, 1, 1, -1)
-        # gl.glMatrixMode(gl.GL_MODELVIEW)
-        # gl.glLoadIdentity()
-        # gl.glRotatef(glfw.get_time() * 50, 0, 1, 1)
-        # gl.glBegin(gl.GL_TRIANGLES)
-        # gl.glColor3f(1, 0, 0)
-        # gl.glVertex3f(-0.6, -0.4, 0)
-        # gl.glColor3f(0, 1, 0)
-        # gl.glVertex3f(0.6, -0.4, 0)
-        # gl.glColor3f(0, 0, 1)
-        # gl.glVertex3f(0, 0.6, 0)
-        # gl.glEnd()
        
         # gl.glRotatef(glfw.get_time() , 0, 1, 1)
         gl.glRotatef(math.radians(30), 1, 1, 0)
@@ -122,30 +105,15 @@ def main():
         # gl.glColor4f(1,1,1,1)
         # for chair in models:
         #     for c in chair: 
-        #         gl.glTranslate( cubeSize*c[0] , cubeSize*c[1] , cubeSize*c[2] )
+        #         gl.glTranslate( CUBE_SIZE*c[0] , CUBE_SIZE*c[1] , CUBE_SIZE*c[2] )
         #         drawCube()
-        #         gl.glTranslate( -cubeSize*c[0] , -cubeSize*c[1] , -cubeSize*c[2] )
+        #         gl.glTranslate( -CUBE_SIZE*c[0] , -CUBE_SIZE*c[1] , -CUBE_SIZE*c[2] )
 
+        #rendered the averaged chairs 
         for c in cubes:
-            gl.glTranslate( cubeSize*c[0] , cubeSize*c[1] , cubeSize*c[2] )
+            gl.glTranslate( CUBE_SIZE*c[0] , CUBE_SIZE*c[1] , CUBE_SIZE*c[2] )
             drawCube()
-            gl.glTranslate( -cubeSize*c[0] , -cubeSize*c[1] , -cubeSize*c[2] )
-
-
-        # #render the averaged chair         
-        # for x in range(MATRIX_SIZE): 
-        #     for y in range(MATRIX_SIZE): 
-        #         for z in range(MATRIX_SIZE): 
-        #             v = voxel_matrix[x,y,z]
-        #             # print("{},{},{}.{}".format(x,y,z,v))
-        #             if v<0.5:
-        #                 continue
-        #             else:
-        #                 gl.glTranslate( cubeSize*(x + offsetX), cubeSize*y , cubeSize*z )
-        #                 Cube()
-        #                 gl.glTranslate( -cubeSize*(x + offsetX), -cubeSize*y , -cubeSize*z )
-
-
+            gl.glTranslate( -CUBE_SIZE*c[0] , -CUBE_SIZE*c[1] , -CUBE_SIZE*c[2] )
 
 
         # Swap front and back buffers
