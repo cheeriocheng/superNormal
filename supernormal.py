@@ -10,8 +10,8 @@ import numpy as np
 
 import pprint
 
-RESOLUTION = 60 #only deal with the chairs at the same resolution 
-MATRIX_SIZE = RESOLUTION + 1 
+RESOLUTION = 10 #only deal with the chairs at the same resolution 
+# MATRIX_SIZE = RESOLUTION + 1 
 CUBE_SIZE = 2 
 
 def drawCube():
@@ -54,7 +54,7 @@ def averageChairs():
     models = load_json.load_folder('models',RESOLUTION )
 
     # an empty list for holding chair models 
-    voxel_matrix = np.zeros((MATRIX_SIZE ,MATRIX_SIZE, MATRIX_SIZE))
+    voxel_matrix = np.zeros((RESOLUTION ,RESOLUTION, RESOLUTION))
     # adding up chairs 
     for chair in models:
         #for each vox written in json file 
@@ -62,9 +62,9 @@ def averageChairs():
             voxel_matrix[c[0],c[1],c[2]] += 1 
     voxel_matrix = np.array(voxel_matrix)/(len(models))
     # create a list of solid cells          
-    for x in range(MATRIX_SIZE): 
-        for y in range(MATRIX_SIZE): 
-            for z in range(MATRIX_SIZE): 
+    for x in range(RESOLUTION): 
+        for y in range(RESOLUTION): 
+            for z in range(RESOLUTION): 
                 v = voxel_matrix[x,y,z]
                 # print("{},{},{}.{}".format(x,y,z,v))
                 if v > 0.5:
