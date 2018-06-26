@@ -10,7 +10,7 @@ import numpy as np
 
 import pprint
 
-RESOLUTION = 60 #only deal with the chairs at the same resolution 
+RESOLUTION = 100 #only deal with the chairs at the same resolution 
 CUBE_SIZE = 2 
 THRESHOLD = 0.3 
 
@@ -73,6 +73,22 @@ def averageChairs():
 
     return occupiedCubes 
 
+def exportForMatlab(cubes):
+    cubes_x =[]
+    cubes_y =[]
+    cubes_z =[]
+    for c in cubes:
+        cubes_x.append(c[0])
+        cubes_y.append(c[1])
+        cubes_z.append(c[2])
+    
+    with open('cube_coordinates.txt', 'w') as file:
+        file.write('solidX = {}; \n'.format(cubes_x))
+        file.write('solidY = {}; \n'.format(cubes_y))
+        file.write('solidZ = {};'.format(cubes_z))
+
+    print('Wrote cube coordinates.')
+
 def main():
 
     # Initialize the library
@@ -95,19 +111,7 @@ def main():
 
     cubes = averageChairs() 
 
-    #matlab experiement 
-    # cubes_x =[]
-    # cubes_y =[]
-    # cubes_z =[]
-    # for c in cubes:
-    #     cubes_x.append(c[0])
-    #     cubes_y.append(c[1])
-    #     cubes_z.append(c[2])
-
-    # print(cubes_x)
-    # print(cubes_y)
-    # print(cubes_z)
-
+    exportForMatlab(cubes)
 
     # Loop until the user closes the window
     while not glfw.window_should_close(window):
