@@ -4,9 +4,10 @@ average and render the chair
 import glfw
 import OpenGL.GL as gl
 import OpenGL.GLU as glu
-import load_json
+import average_chair
 import math 
 import numpy as np 
+
 
 import pprint
 
@@ -46,32 +47,6 @@ def drawCube():
         for vertex in edge:
             gl.glVertex3fv(vertices[vertex])
     gl.glEnd()
-
-
-def averageChairs():
-    occupiedCubes = []
-     #load all the models with the same grid  
-    models = load_json.load_folder('models',RESOLUTION )
-
-    # an empty list for holding chair models 
-    voxel_matrix = np.zeros((RESOLUTION ,RESOLUTION, RESOLUTION))
-    # adding up chairs 
-    for chair in models:
-        #for each vox written in json file 
-        for c in chair: 
-            voxel_matrix[c[0],c[1],c[2]] += 1 
-    voxel_matrix = np.array(voxel_matrix)/(len(models))
-    print("averaging {} chairs".format(len(models)))
-    # create a list of solid cells          
-    for x in range(RESOLUTION): 
-        for y in range(RESOLUTION): 
-            for z in range(RESOLUTION): 
-                v = voxel_matrix[x,y,z]
-                # print("{},{},{}.{}".format(x,y,z,v))
-                if v > THRESHOLD:
-                    occupiedCubes.append([x,y,z])
-
-    return occupiedCubes 
 
 
 
@@ -118,7 +93,8 @@ def main():
     gl.glColor4f(1,1,1,1)
 
 
-    cubes = averageChairs() 
+    # cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
+    cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
 
     # exportForMatlab(cubes)
 
