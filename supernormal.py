@@ -10,9 +10,9 @@ import numpy as np
 
 import pprint
 
-RESOLUTION = 10 #only deal with the chairs at the same resolution 
-# MATRIX_SIZE = RESOLUTION + 1 
+RESOLUTION = 60 #only deal with the chairs at the same resolution 
 CUBE_SIZE = 2 
+THRESHOLD = 0.3 
 
 def drawCube():
     vertices= np.array([\
@@ -61,14 +61,15 @@ def averageChairs():
         for c in chair: 
             voxel_matrix[c[0],c[1],c[2]] += 1 
     voxel_matrix = np.array(voxel_matrix)/(len(models))
+    print("averaging {} chairs".format(len(models)))
     # create a list of solid cells          
     for x in range(RESOLUTION): 
         for y in range(RESOLUTION): 
             for z in range(RESOLUTION): 
                 v = voxel_matrix[x,y,z]
                 # print("{},{},{}.{}".format(x,y,z,v))
-                if v > 0.5:
-                    occupiedCubes.append([x,y,z,v])
+                if v > THRESHOLD:
+                    occupiedCubes.append([x,y,z])
 
     return occupiedCubes 
 
@@ -80,7 +81,7 @@ def main():
 
     display = [640, 480]
     # Create a windowed mode window and its OpenGL context
-    window = glfw.create_window(display[0], display[1], "Hello World", None, None)
+    window = glfw.create_window(display[0], display[1], "super normal", None, None)
     if not window:
         glfw.terminate()
         return
@@ -93,6 +94,20 @@ def main():
     gl.glColor4f(1,1,1,1)
 
     cubes = averageChairs() 
+
+    #matlab experiement 
+    # cubes_x =[]
+    # cubes_y =[]
+    # cubes_z =[]
+    # for c in cubes:
+    #     cubes_x.append(c[0])
+    #     cubes_y.append(c[1])
+    #     cubes_z.append(c[2])
+
+    # print(cubes_x)
+    # print(cubes_y)
+    # print(cubes_z)
+
 
     # Loop until the user closes the window
     while not glfw.window_should_close(window):

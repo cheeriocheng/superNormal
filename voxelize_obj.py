@@ -1,3 +1,5 @@
+
+
 import argparse
 from voxlib.voxelize import voxelize
 import json
@@ -20,8 +22,7 @@ def load_directory(directory, res):
 
     return models
 
-# filename = "chair1"
-# voxels = [v for v in voxelize("models_unprocessed/{}.obj".format(filename), 30)] #60
+#python3 voxelize_obj.py models_unprocessed_obj 10
 
 
 if __name__ == '__main__':
