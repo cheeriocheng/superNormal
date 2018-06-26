@@ -10,9 +10,9 @@ import numpy as np
 
 import pprint
 
-RESOLUTION = 20 #only deal with the chairs at the same resolution 
+RESOLUTION = 60 #only deal with the chairs at the same resolution 
 CUBE_SIZE = 2 
-THRESHOLD = 0.3
+THRESHOLD = 0.21
 
 def drawCube():
     vertices= np.array([\
@@ -84,7 +84,7 @@ def exportForMatlab(cubes):
         cubes_y.append(c[1])
         cubes_z.append(c[2])
     
-    with open('{}_cube_coordinates.txt'.format(RESOLUTION), 'w') as file:
+    with open('{}_{}_cube_coordinates.txt'.format(RESOLUTION,THRESHOLD), 'w') as file:
         file.write('solidX = {}; \n'.format(cubes_x))
         file.write('solidY = {}; \n'.format(cubes_y))
         file.write('solidZ = {};'.format(cubes_z))
@@ -109,7 +109,7 @@ def main():
     # Make the window's context current
     glfw.make_context_current(window)
 
-    glu.gluPerspective(45, (display[0]/display[1]), 0.1, 400.0)
+    glu.gluPerspective(45, (display[0]/display[1]), 0.1, RESOLUTION*6.0)
     glu.gluLookAt(- RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE*2, RESOLUTION*CUBE_SIZE/2 , RESOLUTION*CUBE_SIZE/2 ,0, 0,1,0)
     
     # gl.glRotatef(-math.radians(90), 0.0, 1.0, 0.0);
@@ -120,13 +120,13 @@ def main():
 
     cubes = averageChairs() 
 
-    exportForMatlab(cubes)
+    # exportForMatlab(cubes)
 
     # Loop until the user closes the window
     while not glfw.window_should_close(window):
        
         # gl.glRotatef(glfw.get_time() , 0, 1, 1)
-        # gl.glRotatef(math.radians(30), 1, 1, 0)
+        gl.glRotatef(math.radians(45), 1, 1, 0)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT|gl.GL_DEPTH_BUFFER_BIT)
 
         #render the chairs as is 
