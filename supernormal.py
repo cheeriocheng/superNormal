@@ -10,9 +10,9 @@ import numpy as np
 
 import pprint
 
-RESOLUTION = 100 #only deal with the chairs at the same resolution 
+RESOLUTION = 20 #only deal with the chairs at the same resolution 
 CUBE_SIZE = 2 
-THRESHOLD = 0.3 
+THRESHOLD = 0.3
 
 def drawCube():
     vertices= np.array([\
@@ -73,6 +73,8 @@ def averageChairs():
 
     return occupiedCubes 
 
+
+
 def exportForMatlab(cubes):
     cubes_x =[]
     cubes_y =[]
@@ -82,12 +84,14 @@ def exportForMatlab(cubes):
         cubes_y.append(c[1])
         cubes_z.append(c[2])
     
-    with open('cube_coordinates.txt', 'w') as file:
+    with open('{}_cube_coordinates.txt'.format(RESOLUTION), 'w') as file:
         file.write('solidX = {}; \n'.format(cubes_x))
         file.write('solidY = {}; \n'.format(cubes_y))
         file.write('solidZ = {};'.format(cubes_z))
 
     print('Wrote cube coordinates.')
+
+
 
 def main():
 
@@ -106,8 +110,13 @@ def main():
     glfw.make_context_current(window)
 
     glu.gluPerspective(45, (display[0]/display[1]), 0.1, 400.0)
-    gl.glTranslatef(- RESOLUTION*CUBE_SIZE/2, -RESOLUTION*CUBE_SIZE/2, - RESOLUTION*CUBE_SIZE*2) #-60-RESOLUTION*4
+    glu.gluLookAt(- RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE*2, RESOLUTION*CUBE_SIZE/2 , RESOLUTION*CUBE_SIZE/2 ,0, 0,1,0)
+    
+    # gl.glRotatef(-math.radians(90), 0.0, 1.0, 0.0);
+    # glRotatef(-xAngle, 1.0f, 0.0f, 0.0f);
+    # gl.glTranslatef(- RESOLUTION*CUBE_SIZE/2, -RESOLUTION*CUBE_SIZE/2, - RESOLUTION*CUBE_SIZE*2) #-60-RESOLUTION*4
     gl.glColor4f(1,1,1,1)
+
 
     cubes = averageChairs() 
 
@@ -117,7 +126,7 @@ def main():
     while not glfw.window_should_close(window):
        
         # gl.glRotatef(glfw.get_time() , 0, 1, 1)
-        gl.glRotatef(math.radians(30), 1, 1, 0)
+        # gl.glRotatef(math.radians(30), 1, 1, 0)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT|gl.GL_DEPTH_BUFFER_BIT)
 
         #render the chairs as is 
@@ -130,6 +139,7 @@ def main():
 
         #rendered the averaged chairs 
         for c in cubes:
+
             gl.glTranslate( CUBE_SIZE*c[0] , CUBE_SIZE*c[1] , CUBE_SIZE*c[2] )
             drawCube()
             gl.glTranslate( -CUBE_SIZE*c[0] , -CUBE_SIZE*c[1] , -CUBE_SIZE*c[2] )
