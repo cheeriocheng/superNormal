@@ -7,11 +7,12 @@ import OpenGL.GLU as glu
 import average_chair
 import math 
 import numpy as np 
+from platos_flood import platos_flood
 
 
 import pprint
 
-RESOLUTION = 100 #only deal with the chairs at the same resolution 
+RESOLUTION = 60 #only deal with the chairs at the same resolution 
 CUBE_SIZE = 2 
 # THRESHOLD = 0.21
 THRESHOLD  = 1 ##1 1.5
@@ -71,11 +72,10 @@ def main():
     ## process the chair models 
 
     # cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
-    cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
-    # cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
-    cubes = average_chair.smooth(cubes)
-    # cubes = average_chair.smooth(cubes)
- 
+    # cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
+    #cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
+    cubes = platos_flood(RESOLUTION)
+
     # exportForMatlab(cubes)
 
     # Initialize the library
