@@ -7,6 +7,7 @@ import OpenGL.GLU as glu
 import average_chair
 import math 
 import numpy as np 
+from platos_flood import platos_flood
 
 
 import pprint
@@ -73,7 +74,8 @@ def main():
 
     # cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
     # cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
-    cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
+    #cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
+    cubes = platos_flood(RESOLUTION)
 
     # exportForMatlab(cubes)
 
