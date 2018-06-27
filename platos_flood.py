@@ -20,6 +20,14 @@ def generate_average_voxel_matrix (resolution):
 
     return voxel_matrix, floor(voxel_count / len(models))
 
+def distance (coords, resolution):
+    half = floor(resolution / 2)
+    d = 0
+    for coord in coords:
+        d += abs(coord - half)
+
+    return -d
+
 def platos_flood (resolution):
 
     # get matrix with # of chair voxels at each cell & average vox per chair
@@ -28,10 +36,21 @@ def platos_flood (resolution):
     print("average voxels per chair: ", avg_vox)
 
     # start with first highest value voxel
-    max_vox = np.unravel_index(voxel_matrix.argmax(), voxel_matrix.shape)
+    max_voxels = []
+    max_value = voxel_matrix[
+        np.unravel_index(voxel_matrix.argmax(), voxel_matrix.shape)]
+    for x in range(resolution):
+        for y in range(resolution):
+            for z in range(resolution):
+                if voxel_matrix[x, y, z] == max_value:
+                    dist = distance((x, y, z), resolution)
 
-    # store voxels as tuple with value first -> (value, x, y, z)
-    seed = (voxel_matrix[max_vox], max_vox[0], max_vox[1], max_vox[2])
+                    # store voxels as tuple with value first 
+                    # -> (value, distance, x, y, z)
+                    max_voxels.append((max_value, dist, x, y, z))
+
+
+    seed = sorted(max_voxels).pop()
 
     print("seed: ", seed)
 
@@ -48,17 +67,18 @@ def platos_flood (resolution):
 
         # add next voxels neighbors to neighbors
         for x, y, z in [(-1,0,0),(0,-1,0),(0,0,-1),(1,0,0),(0,1,0),(0,0,1)]:
-            coords = (x + next_vox[1], y + next_vox[2], z + next_vox[3])
+            coords = (x + next_vox[2], y + next_vox[3], z + next_vox[4])
             if min(coords) > -1 and max(coords) < resolution:
                 value = voxel_matrix[coords]
-                neighbor_vox = (value, coords[0], coords[1], coords[2])
+                dist = distance(coords, resolution)
+                neighbor_vox = (value, dist, coords[0], coords[1], coords[2])
                 if neighbor_vox not in platos:
                     neighbors.add(neighbor_vox)
 
         print("*", next_vox)
 
     # strip out values and just return [x, y, z] coords lists
-    return [list(coords[1:]) for coords in platos]
+    return [list(coords[2:]) for coords in platos]
 
 if __name__ == "__main__":
     platos_chair = platos_flood(60)
