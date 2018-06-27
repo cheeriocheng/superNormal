@@ -38,7 +38,7 @@ def single_cell(RESOLUTION,THRESHOLD):
 
 
 def neighbors(RESOLUTION,THRESHOLD):
-    THRESHOLD  = 1.5
+    
     occupiedCubes = []
      #load all the models with the same grid  
     models = load_json.load_folder('models',RESOLUTION )
@@ -66,8 +66,28 @@ def neighbors(RESOLUTION,THRESHOLD):
               if neighour_sum > THRESHOLD:
                   occupiedCubes.append([x,y,z])
 
-
     return occupiedCubes 
+
+
+def smooth( occupiedCubes):
+  print('Smoothing the model of {} cubes...'.format(len(occupiedCubes)))
+  filteredCubes = []
+  for c in occupiedCubes:
+            ## counting neighbors 
+            neighour_count = 0
+            for n in SIX_NEIGHBORS:
+                p = np.array(c)+n
+
+                if p.tolist() in occupiedCubes: 
+                    neighour_count += 1 
+
+            if neighour_count > 3:
+                filteredCubes.append(c)
+            # else:
+            #     print("{}\t{}".format(c,neighour_count))  
+  print('Reduced to {} cubes.'.format(len(filteredCubes)))
+  return filteredCubes
+
 
 def build_neighbor_dict(voxel_matrix, center_ind, dict):
   ## TODO edge cases: out of boundary 
@@ -92,7 +112,7 @@ def flood(RESOLUTION,THRESHOLD):
         for c in chair: 
             voxel_matrix[c[0],c[1],c[2]] += 1 
     voxel_matrix = np.array(voxel_matrix)/(len(models))
-    print("averaging {} chairs".format(len(models)))
+    print("Averaging {} chairs".format(len(models)))
 
     neighbor_dict = {}
     max_ind = np.unravel_index(voxel_matrix.argmax(), voxel_matrix.shape)

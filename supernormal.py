@@ -11,9 +11,10 @@ import numpy as np
 
 import pprint
 
-RESOLUTION = 60 #only deal with the chairs at the same resolution 
+RESOLUTION = 100 #only deal with the chairs at the same resolution 
 CUBE_SIZE = 2 
-THRESHOLD = 0.21
+# THRESHOLD = 0.21
+THRESHOLD  = 1 ##1 1.5
 
 def drawCube():
     vertices= np.array([\
@@ -66,15 +67,15 @@ def exportForMatlab(cubes):
 
     print('Wrote cube coordinates.')
 
-
-
 def main():
     ## process the chair models 
 
     # cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
-    # cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
-    cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
-
+    cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
+    # cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
+    cubes = average_chair.smooth(cubes)
+    # cubes = average_chair.smooth(cubes)
+ 
     # exportForMatlab(cubes)
 
     # Initialize the library
@@ -92,13 +93,14 @@ def main():
     glfw.make_context_current(window)
 
     glu.gluPerspective(45, (display[0]/display[1]), 0.1, RESOLUTION*6.0)
-    # glu.gluLookAt(- RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE*2, RESOLUTION*CUBE_SIZE/2 , RESOLUTION*CUBE_SIZE/2 ,0, 0,1,0)
+    glu.gluLookAt(- RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE*2, RESOLUTION*CUBE_SIZE/2 , RESOLUTION*CUBE_SIZE/2 ,0, 0,1,0)
     
     # gl.glRotatef(-math.radians(90), 0.0, 1.0, 0.0);
     # glRotatef(-xAngle, 1.0f, 0.0f, 0.0f);
-    gl.glTranslatef(- RESOLUTION*CUBE_SIZE/2, -RESOLUTION*CUBE_SIZE/2, - RESOLUTION*CUBE_SIZE*2) #-60-RESOLUTION*4
+    # gl.glTranslatef(- RESOLUTION*CUBE_SIZE/2, -RESOLUTION*CUBE_SIZE/2, - RESOLUTION*CUBE_SIZE*2) #-60-RESOLUTION*4
     gl.glColor4f(1,1,1,1)
 
+    print("Rendering...")
     # Loop until the user closes the window
     while not glfw.window_should_close(window):
        

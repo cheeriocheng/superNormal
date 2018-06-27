@@ -12,7 +12,7 @@ def load_folder(directory, res):
                 with open(os.path.join(directory, filename)) as f:
                     model = json.load(f)
                     models.append(model)
-                    print('loaded model from file: ' + str(filename))
+                    print('Loaded file: ' + str(filename))
 
             except:
                 print('failed to parse file: ' + str(filename))
