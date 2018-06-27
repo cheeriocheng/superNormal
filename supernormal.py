@@ -69,6 +69,14 @@ def exportForMatlab(cubes):
 
 
 def main():
+    ## process the chair models 
+
+    cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
+    # cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
+    # cubes = average_chair.random_walk(RESOLUTION,THRESHOLD) 
+
+    # exportForMatlab(cubes)
+
 
     # Initialize the library
     if not glfw.init():
@@ -91,12 +99,6 @@ def main():
     # glRotatef(-xAngle, 1.0f, 0.0f, 0.0f);
     # gl.glTranslatef(- RESOLUTION*CUBE_SIZE/2, -RESOLUTION*CUBE_SIZE/2, - RESOLUTION*CUBE_SIZE*2) #-60-RESOLUTION*4
     gl.glColor4f(1,1,1,1)
-
-
-    # cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
-    cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
-
-    # exportForMatlab(cubes)
 
     # Loop until the user closes the window
     while not glfw.window_should_close(window):

@@ -15,6 +15,7 @@ def single_cell(RESOLUTION,THRESHOLD):
             voxel_matrix[c[0],c[1],c[2]] += 1 
     voxel_matrix = np.array(voxel_matrix)/(len(models))
     print("averaging {} chairs".format(len(models)))
+
     ##create a list of solid cells          
     for x in range(RESOLUTION): 
         for y in range(RESOLUTION): 
@@ -28,7 +29,7 @@ def single_cell(RESOLUTION,THRESHOLD):
 
 
 def neighbors(RESOLUTION,THRESHOLD):
-    THRESHOLD  = 2
+    THRESHOLD  = 1.4
     occupiedCubes = []
      #load all the models with the same grid  
     models = load_json.load_folder('models',RESOLUTION )
@@ -42,14 +43,7 @@ def neighbors(RESOLUTION,THRESHOLD):
             voxel_matrix[c[0],c[1],c[2]] += 1 
     voxel_matrix = np.array(voxel_matrix)/(len(models))
     print("averaging {} chairs".format(len(models)))
-    # create a list of solid cells          
-    # for x in range(RESOLUTION): 
-    #     for y in range(RESOLUTION): 
-    #         for z in range(RESOLUTION): 
-    #             ## if this voxel is occupied by most models     
-                # v = voxel_matrix[x,y,z]
-                # if v > THRESHOLD:
-                #     occupiedCubes.append([x,y,z])
+
     neighours = np.array([
         [1,0,0],
         [0,1,0],
@@ -72,6 +66,29 @@ def neighbors(RESOLUTION,THRESHOLD):
 
 
     return occupiedCubes 
+
+
+def random_walk(RESOLUTION,THRESHOLD):
+    occupiedCubes = []
+     #load all the models with the same grid  
+    models = load_json.load_folder('models',RESOLUTION )
+
+    # an empty list for holding chair models 
+    voxel_matrix = np.zeros((RESOLUTION ,RESOLUTION, RESOLUTION))
+    # adding up chairs 
+    for chair in models:
+        #for each vox written in json file 
+        for c in chair: 
+            voxel_matrix[c[0],c[1],c[2]] += 1 
+    voxel_matrix = np.array(voxel_matrix)/(len(models))
+    print("averaging {} chairs".format(len(models)))
+
+    max_ind = np.unravel_index(voxel_matrix.argmax(), voxel_matrix.shape)
+    
+    ##TODO 
+    
+    return occupiedCubes 
+
 
 if __name__ == "__main__":
     print("averaging module")
