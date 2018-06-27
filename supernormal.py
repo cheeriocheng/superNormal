@@ -72,8 +72,8 @@ def main():
     ## process the chair models 
 
     # cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
-    cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
-    # cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
+    # cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
+    cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
 
     # exportForMatlab(cubes)
 
