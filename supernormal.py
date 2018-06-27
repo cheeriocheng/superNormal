@@ -71,12 +71,11 @@ def exportForMatlab(cubes):
 def main():
     ## process the chair models 
 
-    cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
-    # cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
-    # cubes = average_chair.random_walk(RESOLUTION,THRESHOLD) 
+    # cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
+    cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
+    # cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
 
     # exportForMatlab(cubes)
-
 
     # Initialize the library
     if not glfw.init():
@@ -93,11 +92,11 @@ def main():
     glfw.make_context_current(window)
 
     glu.gluPerspective(45, (display[0]/display[1]), 0.1, RESOLUTION*6.0)
-    glu.gluLookAt(- RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE*2, RESOLUTION*CUBE_SIZE/2 , RESOLUTION*CUBE_SIZE/2 ,0, 0,1,0)
+    # glu.gluLookAt(- RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE/2, RESOLUTION*CUBE_SIZE*2, RESOLUTION*CUBE_SIZE/2 , RESOLUTION*CUBE_SIZE/2 ,0, 0,1,0)
     
     # gl.glRotatef(-math.radians(90), 0.0, 1.0, 0.0);
     # glRotatef(-xAngle, 1.0f, 0.0f, 0.0f);
-    # gl.glTranslatef(- RESOLUTION*CUBE_SIZE/2, -RESOLUTION*CUBE_SIZE/2, - RESOLUTION*CUBE_SIZE*2) #-60-RESOLUTION*4
+    gl.glTranslatef(- RESOLUTION*CUBE_SIZE/2, -RESOLUTION*CUBE_SIZE/2, - RESOLUTION*CUBE_SIZE*2) #-60-RESOLUTION*4
     gl.glColor4f(1,1,1,1)
 
     # Loop until the user closes the window

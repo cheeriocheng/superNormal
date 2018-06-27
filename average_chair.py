@@ -29,7 +29,7 @@ def single_cell(RESOLUTION,THRESHOLD):
 
 
 def neighbors(RESOLUTION,THRESHOLD):
-    THRESHOLD  = 1.4
+    THRESHOLD  = 1.5
     occupiedCubes = []
      #load all the models with the same grid  
     models = load_json.load_folder('models',RESOLUTION )
@@ -44,6 +44,8 @@ def neighbors(RESOLUTION,THRESHOLD):
     voxel_matrix = np.array(voxel_matrix)/(len(models))
     print("averaging {} chairs".format(len(models)))
 
+
+    ## add self?
     neighours = np.array([
         [1,0,0],
         [0,1,0],
@@ -60,6 +62,7 @@ def neighbors(RESOLUTION,THRESHOLD):
               for n in neighours:
                   p = np.array([x,y,z])+n
                   neighour_sum += voxel_matrix[p[0],p[1],p[2]]
+              neighour_sum += voxel_matrix[x,y,z]   
               # print("{}\t{}\t{}\t{}".format(x,y,z,neighour_sum))  
               if neighour_sum > THRESHOLD:
                   occupiedCubes.append([x,y,z])
@@ -68,7 +71,8 @@ def neighbors(RESOLUTION,THRESHOLD):
     return occupiedCubes 
 
 
-def random_walk(RESOLUTION,THRESHOLD):
+
+def flood(RESOLUTION,THRESHOLD):
     occupiedCubes = []
      #load all the models with the same grid  
     models = load_json.load_folder('models',RESOLUTION )
@@ -85,7 +89,7 @@ def random_walk(RESOLUTION,THRESHOLD):
 
     max_ind = np.unravel_index(voxel_matrix.argmax(), voxel_matrix.shape)
     
-    ##TODO 
+    neighbors
     
     return occupiedCubes 
 
