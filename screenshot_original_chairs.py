@@ -7,6 +7,8 @@ import OpenGL.GLU as glu
 import average_chair
 import math 
 import numpy as np 
+import load_json
+
 from platos_flood import platos_flood
 
 
@@ -14,8 +16,6 @@ import pprint
 
 RESOLUTION = 40 #only deal with the chairs at the same resolution 
 CUBE_SIZE = 2 
-# THRESHOLD = 0.21
-THRESHOLD  = 1.2 ##1 1.5
 
 def drawCube():
     vertices= np.array([\
@@ -50,37 +50,21 @@ def drawCube():
             gl.glVertex3fv(vertices[vertex])
     gl.glEnd()
 
-
-
-def exportForMatlab(cubes):
-    cubes_x =[]
-    cubes_y =[]
-    cubes_z =[]
-    for c in cubes:
-        cubes_x.append(c[0])
-        cubes_y.append(c[1])
-        cubes_z.append(c[2])
-    
-    with open('{}_{}_cube_coordinates.txt'.format(RESOLUTION,THRESHOLD), 'w') as file:
-        file.write('solidX = {}; \n'.format(cubes_x))
-        file.write('solidY = {}; \n'.format(cubes_y))
-        file.write('solidZ = {};'.format(cubes_z))
-
-    print('Wrote cube coordinates.')
-
 def main():
+
+    models = load_json.load_folder('models',RESOLUTION )
     ## process the chair models 
 
     # cubes = average_chair.single_cell(RESOLUTION,THRESHOLD) 
 
-    cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
-    cubes = average_chair.smooth(cubes)
+    # cubes = average_chair.neighbors (RESOLUTION,THRESHOLD) 
+    # cubes = average_chair.smooth(cubes)
 
     # cubes = average_chair.flood(RESOLUTION,THRESHOLD) 
     
     # cubes = platos_flood(RESOLUTION)
 
-    exportForMatlab(cubes)
+    # exportForMatlab(cubes)
 
     # Initialize the library
     if not glfw.init():
@@ -109,23 +93,23 @@ def main():
     while not glfw.window_should_close(window):
        
         # gl.glRotatef(glfw.get_time() , 0, 1, 1)
-        gl.glRotatef(math.radians(45), 1, 1, 0)
+        # gl.glRotatef(math.radians(45), 1, 1, 0)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT|gl.GL_DEPTH_BUFFER_BIT)
 
-        #render the chairs as is 
-        # gl.glColor4f(1,1,1,1)
+        # render the chairs as is 
+        
         # for chair in models:
-        #     for c in chair: 
-        #         gl.glTranslate( CUBE_SIZE*c[0] , CUBE_SIZE*c[1] , CUBE_SIZE*c[2] )
-        #         drawCube()
-        #         gl.glTranslate( -CUBE_SIZE*c[0] , -CUBE_SIZE*c[1] , -CUBE_SIZE*c[2] )
-
-        #rendered the averaged chairs 
-        for c in cubes:
-
+        for c in models[0]: 
             gl.glTranslate( CUBE_SIZE*c[0] , CUBE_SIZE*c[1] , CUBE_SIZE*c[2] )
             drawCube()
             gl.glTranslate( -CUBE_SIZE*c[0] , -CUBE_SIZE*c[1] , -CUBE_SIZE*c[2] )
+
+        #rendered the averaged chairs 
+        # for c in cubes:
+
+        #     gl.glTranslate( CUBE_SIZE*c[0] , CUBE_SIZE*c[1] , CUBE_SIZE*c[2] )
+        #     drawCube()
+        #     gl.glTranslate( -CUBE_SIZE*c[0] , -CUBE_SIZE*c[1] , -CUBE_SIZE*c[2] )
 
 
         # Swap front and back buffers
