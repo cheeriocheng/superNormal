@@ -1,5 +1,5 @@
 '''
-average and render the chair
+render the chair and display for 5 min each
 '''
 import glfw
 import OpenGL.GL as gl

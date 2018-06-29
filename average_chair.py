@@ -81,7 +81,7 @@ def smooth( occupiedCubes):
                 if p.tolist() in occupiedCubes: 
                     neighour_count += 1 
 
-            if neighour_count > 3:
+            if neighour_count > 1:
                 filteredCubes.append(c)
             # else:
             #     print("{}\t{}".format(c,neighour_count))  
